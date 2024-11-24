@@ -1,15 +1,12 @@
 import { io } from "socket.io-client";
-import {
-  updateCursorPosition,
-  removeCursorPosition,
-} from "../CursorOverlay/cursorSlice";
+import { updateCursorPosition, removeCursorPosition } from "../CursorOverlay/cursorSlice";
 import { store } from "../store/store";
 import { setElements, updateElement } from "../Whiteboard/whiteboardSlice";
 
 let socket;
 
 export const connectWithSocketServer = () => {
-  socket = io("http://localhost:3003");
+  socket = io("https://collaborative-whiteboard-backend.vercel.app/?vercelToolbarCode=hZyDUPHyOqsrqY_");
 
   socket.on("connect", () => {
     console.log("connected to socket.io server");
