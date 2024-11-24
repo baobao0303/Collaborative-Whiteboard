@@ -12,6 +12,7 @@ import {
   getElementAtPosition,
   getCursorForPosition,
   getResizedCoordinates,
+  updatePencilElementWhenMoving,
 } from "./utils";
 import { v4 as uuid } from "uuid";
 import { updateElement as updateElementInStore } from "./whiteboardSlice";
@@ -101,6 +102,15 @@ const Whiteboard = () => {
 
           setSelectedElement({ ...element, offsetX, offsetY });
         }
+
+        if (element && element.type === toolTypes.PENCIL) {
+          setAction(actions.MOVING);
+
+          const xOffsets = element.points.map((point) => clientX - point.x);
+          const yOffsets = element.points.map((point) => clientY - point.y);
+
+          setSelectedElement({ ...element, xOffsets, yOffsets });
+        }
         break;
       }
     }
@@ -167,6 +177,26 @@ const Whiteboard = () => {
       event.target.style.cursor = element
         ? getCursorForPosition(element.position)
         : "default";
+    }
+
+    if (
+      selectedElement &&
+      toolType === toolTypes.SELECTION &&
+      action === actions.MOVING &&
+      selectedElement.type === toolTypes.PENCIL
+    ) {
+      const newPoints = selectedElement.points.map((_, index) => ({
+        x: clientX - selectedElement.xOffsets[index],
+        y: clientY - selectedElement.yOffsets[index],
+      }));
+
+      const index = elements.findIndex((el) => el.id === selectedElement.id);
+
+      if (index !== -1) {
+        updatePencilElementWhenMoving({ index, newPoints }, elements);
+      }
+
+      return;
     }
 
     if (

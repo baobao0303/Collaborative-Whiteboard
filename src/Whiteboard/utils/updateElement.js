@@ -4,6 +4,25 @@ import { emitElementUpdate } from "../../socketConn/socketConn";
 import { store } from "../../store/store";
 import { setElements } from "../whiteboardSlice";
 
+export const updatePencilElementWhenMoving = (
+  { index, newPoints },
+  elements
+) => {
+  const elementsCopy = [...elements];
+
+  elementsCopy[index] = {
+    ...elementsCopy[index],
+    points: newPoints,
+  };
+
+  console.log("updating pencil element");
+
+  const updatedPencilElement = elementsCopy[index];
+
+  store.dispatch(setElements(elementsCopy));
+  emitElementUpdate(updatedPencilElement);
+};
+
 export const updateElement = (
   { id, x1, x2, y1, y2, type, index, text },
   elements
