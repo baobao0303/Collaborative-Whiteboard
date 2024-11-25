@@ -6,7 +6,7 @@ import { setElements, updateElement } from "../Whiteboard/whiteboardSlice";
 let socket;
 
 export const connectWithSocketServer = () => {
-  socket = io("https://collaborative-whiteboard-backend.vercel.app");
+  socket = io("https://collaborative-whiteboard-backend-qdub.onrender.com");
 
   socket.on("connect", () => {
     console.log("connected to socket.io server");
